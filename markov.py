@@ -3,52 +3,60 @@ from random import choice
 
 def open_and_read_file():
 
-    open_file = open(("green-eggs.txt", "r"))
+    file = open('green-eggs.txt')
+    text_string = file.read()
+    file.close()
 
-    new_list = []
+    return text_string
+
+def make_chains(text_string):
+
+    chains = {}
+
+    words = text_string.split()
+
+    # To set a stop point, append None to the end of our word list.
+
+    words.append(None)
+
+    for i in range(len(words) - 2):
+        key = (words[i], words[i + 1])
+        value = words[i + 2]
+
+        if key not in chains:
+            chains[key] = []
+
+        chains[key].append(value)
+
+    return chains
+
+
+def make_text(chains):
     
-    for line in open_file:
-        line = line.rstrip().split(" ", ",")
-        new_list.append(line)
+    key = choice(list(chains.keys()))
+    words = [key[0], key[1]]
+    word = choice(chains[key])
 
-    return(new_list)
+    # Keep looping until we reach a value of None
+    # (which would mean it was the end of our original text)
+    # Note that for long texts (like a full book), this might mean
+    # it would run for a very long time.
 
-
-def make_chains(new_list):
-
-    word_list = open_and_read_file()
-
-    word_chains = {}
-
-    index = 0
-
-    for i in range(len(word_list)):
-        word_keys = (word_list[i], word_list[i + 1])
-
-
-    return(word_chains)
-
-
-def make_text(word_chains):
-    """Return text from chains."""
-
-    words = make_chains()
-
+    while word is not None:
+        key = (key[1], word)
+        words.append(word)
+        word = choice(chains[key])
 
     return ' '.join(words)
 
-
 def main():
 
-input_path = 'green-eggs.txt'
+    text_string = open_and_read_file('green-eggs.txt')
 
-# Open the file and turn it into one long string
-input_text = open_and_read_file(input_path)
+    chains = make_chains(text_string)
 
-# Get a Markov chain
-chains = make_chains(input_text)
+    random_text = make_text(chains)
 
-# Produce random text
-random_text = make_text(word_chains)
+    print(random_text)
 
-print(random_text)
+main()
