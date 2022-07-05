@@ -51,7 +51,7 @@ def make_text(chains):
 
 def main():
 
-    text_string = open_and_read_file('green-eggs.txt')
+    text_string = open_and_read_file()
 
     chains = make_chains(text_string)
 
